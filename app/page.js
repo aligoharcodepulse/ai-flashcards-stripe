@@ -1,10 +1,20 @@
-// "use client"
+ "use client"
 import { Button, Container, Toolbar, Typography, AppBar, Box, Grid } from "@mui/material";
 import Head from "next/head";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import getStripe from "@/utils/get-stripe";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter()
+
+  const handleSignUp = () => {
+    router.push('/sign-up')
+  }
+  const handleSignIn = () => {
+    router.push('/sign-in')
+  }
+
   return(
    <Container maxWidth="100vw">
     <Head>
@@ -16,8 +26,8 @@ export default function Home() {
       <Toolbar>
         <Typography variant="h6" style={{flexGrow:1}}>Flashcard SaaS</Typography>
         <SignedOut>
-          <Button color="inherit">Login</Button>
-          <Button color="inherit">Sign Up</Button>
+          <Button color="inherit" onClick={handleSignIn}>Login</Button>
+          <Button color="inherit" onClick={handleSignUp}>Sign Up</Button>
         </SignedOut>
         <SignedIn>
           <UserButton/>
@@ -35,15 +45,15 @@ export default function Home() {
       <Typography variant="h4" gutterBottom>Features</Typography>
       <Grid container spacing={4}>
         <Grid item xs={12} md={4}>
-          <Typography variant="h6" gutterBottom>Easy text input</Typography>
+          <Typography variant="h5" gutterBottom>Easy text input</Typography>
           <Typography>{' '}Simply input your text and let our software do the rest. Creating flashcards has never been easier.</Typography>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Typography variant="h6" gutterBottom>Smart Flashcards</Typography>
-          <Typography>{' '}Our AI intelligently breaks down your text into concise flascards, perfect for studying.</Typography>
+          <Typography variant="h5" gutterBottom>Smart Flashcards</Typography>
+          <Typography>{' '}Our AI intelligently breaks down your text into concise flashcards, perfect for studying.</Typography>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Typography variant="h6" gutterBottom>Accessible Anywhere</Typography>
+          <Typography variant="h5" gutterBottom>Accessible Anywhere</Typography>
           <Typography>{' '}Access your flashcards from any device, at any time. Study on the go with ease.</Typography>
         </Grid>
       </Grid>
@@ -63,7 +73,7 @@ export default function Home() {
           }}>
             <Typography variant="h5" gutterBottom>Basic</Typography>
             <Typography variant="h6" gutterBottom>$5 / month</Typography>
-            <Typography>{' '}Access to basic flascards features and limited storage.</Typography>
+            <Typography>{' '}Access to basic flashcards features and limited storage.</Typography>
             <Button variant="contained" color="primary" sx={{mt:2}}>Choose Basic</Button>
           </Box>
         </Grid>

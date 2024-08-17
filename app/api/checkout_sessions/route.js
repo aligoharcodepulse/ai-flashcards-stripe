@@ -20,7 +20,7 @@ export async function POST(req){
                 },
                 unit_amount: formatAmountForStripe(10),
                 recurring:{
-                    inteeval: 'month', 
+                    interval: 'month', 
                     interval_count:1,
                 }
             },
