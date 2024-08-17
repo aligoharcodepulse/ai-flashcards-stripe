@@ -1,6 +1,6 @@
 import { AppBar, Container, Toolbar, Typography, Button, Box } from "@mui/material";
 import Link from "next/link";
-import { SignIn } from "@clerk/nextjs";
+import { SignUp } from "@clerk/nextjs";
 
 
 export default function SignUpPage() {
@@ -35,9 +35,9 @@ export default function SignUpPage() {
                 alignItems="center"
                 justifyContent="center"
             >
-                <Typography variant="h4">Sign In</Typography>
+                <Typography variant="h4">Sign Up</Typography>
             
-                <SignIn />
+                <SignUp />
             </Box>
         </Container>
     );
