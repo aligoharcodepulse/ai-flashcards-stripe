@@ -106,7 +106,7 @@ export default function Generate(){
             </Box>
             {flashCards.length > 0 &&
                 <Box sx={{mt:4}}>
-                    <Typography variant="h5">FlashCards Preview</Typography>
+                    <Typography variant="h5" gutterBottom>FlashCards Preview</Typography>
                     <Grid container spacing={3}>
                         {flashCards.map((flashcard, index)=>(
                             <Grid item xs={12} sm={6} md={4} key={index}>
@@ -115,7 +115,7 @@ export default function Generate(){
                                         handleCardClick(index)
                                     }}>
                                         <CardContent>
-                                            <Box sx={{perspective:'1000px',
+                                            <Box sx={{perspective:'700px',
                                                 '& > div':{
                                                     transition: 'transform 0.6s',
                                                     transformStyle: 'preserve-3d',
@@ -123,7 +123,7 @@ export default function Generate(){
                                                     width:'100%',
                                                     height:'200px',
                                                     boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
-                                                    transform: flipped(index)? 'rotateY(180deg)':'rotateY(0deg)'
+                                                    transform: flipped[index]? 'rotateY(180deg)':'rotateY(0deg)'
                                                 },
                                                 '& > div > div':{
                                                     position: 'absolute',

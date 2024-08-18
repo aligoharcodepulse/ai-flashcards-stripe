@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
+import Groq from "groq-sdk";
 
 const systemPrompt = `
-You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content.
-Follow these guidelines:
+You are a flashcard creator. Your task is to generate concise and effective flashcards based on the given topic or content. Follow these guidelines:
 1. Create clear and concise questions for the front of the flashcard.
 2. Provide accurate and informative answers for the back of the flashcard.
 3. Ensure that each flashcard focuses on the single concept or piece of information.
@@ -16,10 +15,10 @@ Follow these guidelines:
 10. Aim to create a balanced set of flashcards that covers the topic comprehensively.
 11. Only generate 10 flashcards.
 
-remember the goal is to facilitate effective learning and retention of information through the flashcards.
+Remember the goal is to facilitate effective learning and retention of information through the flashcards.
 
-Return in the following JSON format. 
-{   
+Return in the following JSON format:
+{
     "flashcards":[
         {
             "front":str,
@@ -27,23 +26,36 @@ Return in the following JSON format.
         }
     ]
 }
-` 
+`;
+
 export async function POST(req) {
-    const openai = new OpenAI({apiKey: process.env.OPENAI_API})
-    const data = await req.text()
-    
-    const completion = await openai.chat.completions.create({
-        messages:[
-            {role:"system", content:systemPrompt},
-            {role:"user", content:data}
+    const groq = new Groq({
+        apiKey: process.env.GROQ_API_KEY
+    });
+
+    const data = await req.text();
+
+    const completion = await groq.chat.completions.create({
+        messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: data }
         ],
-        model:'gpt-3.5-turbo',
-        response_format:{type:'json_object'}
-    })
-    // console.log(completion.choices[0].message.content);
-    console.log(">>>>>>>>>>>>>>>>>",completion);
-    
-    
-    const flashcards = JSON.parse(completion.choices[0].message.content)
-    return NextResponse.json(flashcards.flashcards)
+        model: 'mixtral-8x7b-32768', 
+        temperature: 0.7,
+        max_tokens: 1000,
+        top_p: 1,
+        stream: false,
+    });
+
+    console.log(">>>>>>>>>>>>>>>>>", completion);
+
+    let flashcards;
+    try {
+        flashcards = JSON.parse(completion.choices[0].message.content);
+    } catch (error) {
+        console.error("Error parsing JSON:", error);
+        return NextResponse.json({ error: "Failed to parse flashcards" }, { status: 500 });
+    }
+
+    return NextResponse.json(flashcards.flashcards);
 }
