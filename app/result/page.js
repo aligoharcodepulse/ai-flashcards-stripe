@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import getStripe from "@/utils/get-stripe"
 import { useSearchParams } from "next/navigation"
-import { CircularProgress, Container, Typography } from "@mui/material"
+import { CircularProgress, Container, Typography, Box } from "@mui/material"
 
 
 const ResultPage = ()=> {
@@ -12,7 +12,7 @@ const ResultPage = ()=> {
     const session_id = searchParams.get('session_id')
 
     const [loading, setLoading] = useState(true)
-    const [sess, setSession] = useState(null)
+    const [session, setSession] = useState(null)
     const [error, setError] = useState(null)
 
     useEffect(()=>{
@@ -83,7 +83,7 @@ const ResultPage = ()=> {
                 <Typography variant= 'h4'>Payment Failed</Typography>
                 <Box sx = {{mt:22}}>
                     <Typography variant = 'body1'>
-                        Your payment was not successful. Please try again
+                        Your payment was not successful. Please try again!
                     </Typography>
                 </Box>
                 </>
@@ -92,3 +92,4 @@ const ResultPage = ()=> {
     )
 
 }
+export default ResultPage

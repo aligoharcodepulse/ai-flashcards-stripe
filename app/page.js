@@ -1,12 +1,14 @@
  "use client"
-import { Button, Container, Toolbar, Typography, AppBar, Box, Grid } from "@mui/material";
+import { Button, Container, Toolbar, Typography, AppBar, Box, Grid, Dialog, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import Head from "next/head";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import getStripe from "@/utils/get-stripe";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Home() {
   const router = useRouter()
+  const [open, setOpen] = useState(false)
 
   const handleSubmit = async ()=>{
     const checkoutSession = await fetch('/api/checkout_session', {
@@ -40,6 +42,13 @@ export default function Home() {
   const handleSignIn = () => {
     router.push('/sign-in')
   }
+  const handleOpen = () => {
+    setOpen(true)
+}
+
+const handleClose = () => {
+    setOpen(false)
+}
 
   return(
    <Container maxWidth="100vw">
@@ -65,7 +74,7 @@ export default function Home() {
     <Box sx={{my:6,textAlign:'center'}}>
       <Typography variant="h3" gutterBottom>Welcome to Flashcard SaaS</Typography>
       <Typography variant="h5" gutterBottom>The easiest way to make falshcards from your text</Typography>
-      <Button variant="contained" color="primary" sx={{mt:2}}>Get Started</Button>
+      <Button variant="contained" color="primary" sx={{mt:2}} onClick={()=>{router.push('/generate')}}>Get Started</Button>
     </Box>
     <Box sx={{my:6}}>
       <Typography variant="h4" gutterBottom>Features</Typography>
@@ -100,9 +109,19 @@ export default function Home() {
             <Typography variant="h5" gutterBottom>Basic</Typography>
             <Typography variant="h6" gutterBottom>$5 / month</Typography>
             <Typography>{' '}Access to basic flashcards features and limited storage.</Typography>
-            <Button variant="contained" color="primary" sx={{mt:2}}>Choose Basic</Button>
+            <Button variant="contained" color="primary" sx={{mt:2}} onClick={handleOpen}>Choose Basic</Button>
           </Box>
         </Grid>
+
+        <Dialog open={open} onClose={handleClose}>
+          <DialogContent>
+            <DialogContentText>Basic subscription is available for free now!</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Ok</Button>
+          </DialogActions>
+        </Dialog>
+
         <Grid item xs={12} md={6}>
           <Box sx={{
             p:3,

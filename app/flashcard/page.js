@@ -43,7 +43,7 @@ export default function Flashcard(){
 
     return(
         <Container maxWidth="100vw">
-                    <Typography variant="h4" sx={{mt:4, mb:4}}>FlashCards Preview</Typography>
+                    <Typography variant="h4" sx={{mt:4, mb:4}}>FlashCard Preview</Typography>
                     <Grid container spacing={3}>
                         {flashCards.map((flashcard, index)=>(
                             <Grid item xs={12} sm={6} md={4} key={index}>

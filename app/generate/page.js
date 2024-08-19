@@ -4,7 +4,7 @@ import { useUser } from "@clerk/nextjs"
 import { doc, writeBatch, collection, getDoc } from "firebase/firestore"
 import { db } from "../firebase/firebaseConfig"
 import { useRouter } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Box, Button, Card, CardActionArea, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, TextField, Typography } from "@mui/material"
 
 export default function Generate(){
@@ -55,11 +55,6 @@ export default function Generate(){
             return
         }
 
-        // if (!isLoaded || !isSignedIn || !user || !user.id) {
-        //     alert('User is not properly loaded. Please try again later.')
-        //     return
-        // }
-
         const batch = writeBatch(db)
         const userDocRef = doc(collection(db, 'users'), user.id)
         const docSnap = await getDoc(userDocRef)
@@ -88,7 +83,7 @@ export default function Generate(){
     }
 
     return(
-        <Container maxWidth="md">
+        <Container maxWidth="lg">
             <Box sx={{
                 mt:4,mb:6, display:'flex', flexDirection:'column',alignItems:'center'
             }}>
@@ -109,7 +104,7 @@ export default function Generate(){
                </Paper>
             </Box>
             {flashCards.length > 0 &&
-                <Box sx={{mt:4}}>
+                <Box sx={{mt:4, maxWidth:'100vw'}} >
                     <Typography variant="h5" gutterBottom>FlashCards Preview</Typography>
                     <Grid container spacing={3}>
                         {flashCards.map((flashcard, index)=>(
@@ -159,8 +154,8 @@ export default function Generate(){
                             </Grid>
                         ))}
                     </Grid>
-                    <Box sx={{mt:4, display:'flex', justifyContent:'center'}}>
-                        <Button variant="contained" color="secondary" onClick={handleOpen}>
+                    <Box sx={{mt:4,mb:4, display:'flex', justifyContent:'center'}}>
+                        <Button variant="contained" color="secondary" sx={{width:'100%'}} onClick={handleOpen}>
                             Save
                         </Button>
                     </Box>
