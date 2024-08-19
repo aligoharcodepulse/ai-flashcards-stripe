@@ -4,11 +4,11 @@ import { useUser } from "@clerk/nextjs"
 import { doc, writeBatch, collection, getDoc } from "firebase/firestore"
 import { db } from "../firebase/firebaseConfig"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Box, Button, Card, CardActionArea, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, TextField, Typography } from "@mui/material"
 
 export default function Generate(){
-    const {isLoaded, isSignedIn, user} = useUser()
+    const { isLoaded, isSignedIn, user } = useUser()
     const [flashCards, setFlashCards] = useState([])
     const [flipped, setFlipped] = useState([])
     const [text, setText] = useState('')
@@ -18,11 +18,10 @@ export default function Generate(){
     const router = useRouter()
 
     const handleSubmit = async() =>{
-        fetch('api/generate',{// internal server error here
+        fetch('api/generate',{
             method: 'POST',
             body: text,
         })
-        // .then((res)=> res.json())
         .then((res) => {
             if (!res.ok) {
                 throw new Error('Failed to generate flashcards');
@@ -55,34 +54,39 @@ export default function Generate(){
             alert('Please enter a name...')
             return
         }
+
+        // if (!isLoaded || !isSignedIn || !user || !user.id) {
+        //     alert('User is not properly loaded. Please try again later.')
+        //     return
+        // }
+
         const batch = writeBatch(db)
-        const userDocRef = doc(collection(db,'users'),user.id)
+        const userDocRef = doc(collection(db, 'users'), user.id)
         const docSnap = await getDoc(userDocRef)
 
         if(docSnap.exists()){
-            const collections= docSnap.data().flashCards || []
-            if (collections.find((f)=> f.name === name)) {
+            const collections = docSnap.data().flashCards || []
+            if (collections.find((f) => f.name === name)) {
                 alert("Flashcard collection with the same name already exists.")
                 return
-            }
-            else{
+            } else {
                 collections.push({name})
-                batch.set(userDocRef,{flashCards:collections}, {merge:true})
+                batch.set(userDocRef, {flashCards: collections}, {merge: true})
             }
+        } else {
+            batch.set(userDocRef, {flashCards: [{name}]})
         }
-        else{
-            batch.set(userDocRef,{flashCards:[{name}]})
-        }
-        
-        const colRef = collection(userDocRef,name)
-        flashCards.forEach((flashcard)=>{
+
+        const colRef = collection(userDocRef, name)
+        flashCards.forEach((flashcard) => {
             const cardDocRef = doc(colRef)
-            batch.set(cardDocRef,flashcard)
+            batch.set(cardDocRef, flashcard)
         })
         await batch.commit()
         handleClose()
-        router.push('flashCards')
+        router.push('/flashcards')
     }
+
     return(
         <Container maxWidth="md">
             <Box sx={{
